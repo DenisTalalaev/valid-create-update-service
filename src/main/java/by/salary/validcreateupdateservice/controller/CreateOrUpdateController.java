@@ -1,0 +1,16 @@
+package by.salary.validcreateupdateservice.controller;
+
+import by.salary.validcreateupdateservice.service.CreateOrUpdateService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/")
+public class CreateOrUpdateController {
+
+    private final CreateOrUpdateService createOrUpdateService;
+
+
+}
