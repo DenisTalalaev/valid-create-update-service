@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "sourceEntityId": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "targetEntityId": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "dataSchemaConfigurationCode": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "data": {
+      "type": "object",
+      "properties": {
+        "relations": {
+          "type": "array",
+          "uniqueItems": true,
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "properties": {
+              "targetEntityIdList": {
+                "type": "array",
+                "uniqueItems": true,
+                "minItems": 1,
+                "items": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              },
+              "entityRelationTypeCode": {
+                "type": "string",
+                "format": "uuid",
+                "enum": [
+                  "fa676913-e5c6-4d5d-88eb-3683811df002"
+                ]
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "targetEntityIdList",
+              "entityRelationTypeCode"
+            ]
+          }
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "relations"
+      ]
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "sourceEntityId",
+    "targetEntityId",
+    "data"
+  ]
+}
