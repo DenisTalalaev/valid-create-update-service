@@ -2,7 +2,6 @@ package by.salary.validcreateupdateservice.entity;
 
 import com.fasterxml.jackson.databind.jsonschema.JsonSchema;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

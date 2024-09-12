@@ -1,10 +1,18 @@
 package by.salary.validcreateupdateservice.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.http.HttpStatus;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
+@Setter
+@JsonSerialize
+@JsonDeserialize
 public class OperationStatus {
     private OperationStatusCode operationStatusCode;
     private List<ErrorInfo> errors = new ArrayList<>();

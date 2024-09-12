@@ -73,7 +73,7 @@ public class CreateOrUpdateAccessor {
     }
 
     public EntityRelationType findEntityRelationType(UUID entityRelationTypeCode) {
-        return ctDataSchemaTypeRepository.findByCode(entityRelationTypeCode.toString()).orElseThrow(
+        return entityRelationTypeRepository.findByCode(entityRelationTypeCode).orElseThrow(
                 () -> new CreateOrUpdateEntityRelationsException(
                         "Entity relation type with code: " + entityRelationTypeCode + " not found",
                         HttpStatus.NOT_FOUND
@@ -86,7 +86,7 @@ public class CreateOrUpdateAccessor {
     }
 
     public List<ServiceDataRelation> findAllRelationsByEntityId(Long entityDataId) {
-        return entityRelationRepository.findAllById(entityDataId)
+        return entityRelationRepository.findAllByEntityData(entityDataRepository.getById(entityDataId))
                 .stream()
                 .map(entityRelation -> new ServiceDataRelation(
                         entityRelation.getId(),
@@ -111,14 +111,14 @@ public class CreateOrUpdateAccessor {
                         .build()
         );
 
-        for (ServiceDataRelation serviceDataRelation : createOrUpdateEntity.getServiceData().getRelations()) {
+        for (RequestDataRelation requestDataRelation : createOrUpdateEntity.getRequestData().getRelations()) {
             entityRelationRepository.save(
                     EntityRelation.builder()
                             .entityData(entityData)
-                            .targetEntityId(serviceDataRelation.getTargetEntityId())
+                            .targetEntityId(requestDataRelation.getTargetEntityId())
                             .entityRelationType(
                                     entityRelationTypeRepository.getById(
-                                            serviceDataRelation.getEntityRelationTypeId()
+                                            requestDataRelation.getEntityRelationTypeId()
                                     )
                             )
                             .build()
@@ -128,54 +128,50 @@ public class CreateOrUpdateAccessor {
     }
 
     public void updateDataEntity(CreateOrUpdateEntity createOrUpdateEntity) {
-        // Update EntityData
         EntityData entityData = entityDataRepository.getById(createOrUpdateEntity.getServiceData().getEntityDataId());
 
-        entityData.setTargetEntityId(createOrUpdateEntity.getRequestData().getTargetEntityId() == null?
-                entityData.getTargetEntityId() : createOrUpdateEntity.getRequestData().getTargetEntityId());
-
-        entityData.setSourceEntityId(createOrUpdateEntity.getRequestData().getSourceEntityId() == null?
-                entityData.getSourceEntityId() : createOrUpdateEntity.getRequestData().getSourceEntityId());
-
-        entityData.setDataSchemaConfiguration(createOrUpdateEntity.getRequestData().getDataSchemaConfigurationId() == null?
-                entityData.getDataSchemaConfiguration():
-                dataSchemaConfigurationRepository.getById(createOrUpdateEntity.getRequestData().getDataSchemaConfigurationId()));
-
         entityData.setLastUpdated(new Timestamp(System.currentTimeMillis()));
+        entityData.setDataSchemaConfiguration(dataSchemaConfigurationRepository.getById(createOrUpdateEntity.getRequestData().getDataSchemaConfigurationId()));
 
         entityDataRepository.save(entityData);
 
-
-        // Find relations
         List<RequestDataRelation> requestRelations = createOrUpdateEntity.getRequestData().getRelations();
         List<ServiceDataRelation> serviceRelations = createOrUpdateEntity.getServiceData().getRelations();
 
-        // Add relations that are not in db
-        requestRelations.stream()
-                .filter(requestRelation -> serviceRelations.stream()
-                        .noneMatch(serviceRelation ->
-                                requestRelation.getTargetEntityId().equals(serviceRelation.getTargetEntityId()) &&
-                                        requestRelation.getEntityRelationTypeId().equals(serviceRelation.getEntityRelationTypeId())
-                        )
-                )
-                .forEach(requestRelation -> {
-                    EntityRelation newRelation = EntityRelation.builder()
-                            .entityData(entityData)
-                            .targetEntityId(requestRelation.getTargetEntityId())
-                            .entityRelationType(entityRelationTypeRepository.getById(requestRelation.getEntityRelationTypeId()))
-                            .build();
-                    entityRelationRepository.save(newRelation);
-                });
+        for (RequestDataRelation requestRelation : requestRelations) {
+            boolean found = false;
+            for (ServiceDataRelation serviceRelation : serviceRelations) {
+                if (requestRelation.getTargetEntityId().equals(serviceRelation.getTargetEntityId()) &&
+                        requestRelation.getEntityRelationTypeId().equals(serviceRelation.getEntityRelationTypeId())) {
+                    found = true;
+                    break;
+                }
+            }
 
-        // Delete relations that are not in new version
-        serviceRelations.stream()
-                .filter(serviceRelation -> requestRelations.stream()
-                        .noneMatch(requestRelation ->
-                                requestRelation.getTargetEntityId().equals(serviceRelation.getTargetEntityId()) &&
-                                        requestRelation.getEntityRelationTypeId().equals(serviceRelation.getEntityRelationTypeId())
-                        )
-                )
-                .forEach(serviceRelation -> entityRelationRepository.deleteById(serviceRelation.getId()));
+            if (!found) {
+                EntityRelation newRelation = EntityRelation.builder()
+                        .entityData(entityData)
+                        .targetEntityId(requestRelation.getTargetEntityId())
+                        .entityRelationType(entityRelationTypeRepository.getById(requestRelation.getEntityRelationTypeId()))
+                        .build();
+                entityRelationRepository.save(newRelation);
+            }
+        }
+
+        for (ServiceDataRelation serviceRelation : serviceRelations) {
+            boolean found = false;
+            for (RequestDataRelation requestRelation : requestRelations) {
+                if (requestRelation.getTargetEntityId().equals(serviceRelation.getTargetEntityId()) &&
+                        requestRelation.getEntityRelationTypeId().equals(serviceRelation.getEntityRelationTypeId())) {
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found) {
+                entityRelationRepository.deleteById(serviceRelation.getId());
+            }
+        }
     }
 
 }

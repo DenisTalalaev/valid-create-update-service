@@ -15,7 +15,7 @@ public class RelationDto {
 
     @NotEmpty
     @Size(min = 1)
-    private List<UUID> targetEntiyIdList;
+    private List<UUID> targetEntityIdList;
 
     private UUID entityRelationTypeCode;
 

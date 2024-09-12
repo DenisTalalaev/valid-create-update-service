@@ -4,6 +4,7 @@ import by.salary.validcreateupdateservice.accessors.CreateOrUpdateAccessor;
 import by.salary.validcreateupdateservice.entity.CtDataSchemaType;
 import by.salary.validcreateupdateservice.entity.DataSchema;
 import by.salary.validcreateupdateservice.entity.DataSchemaConfiguration;
+import by.salary.validcreateupdateservice.entity.EntityData;
 import by.salary.validcreateupdateservice.exceptions.CreateOrUpdateEntityRelationsException;
 import by.salary.validcreateupdateservice.model.*;
 import by.salary.validcreateupdateservice.validators.CreateOrUpdateEntityValidator;
@@ -64,7 +65,7 @@ public class CreateOrUpdateService {
                     .findEntityRelationType(relationDto.getEntityRelationTypeCode())
                     .getId();
 
-            for (UUID targetEntityId : relationDto.getTargetEntiyIdList()) {
+            for (UUID targetEntityId : relationDto.getTargetEntityIdList()) {
                 createOrUpdateEntity.getRequestData().getRelations()
                         .add(
                                 new RequestDataRelation(
@@ -75,18 +76,20 @@ public class CreateOrUpdateService {
             }
         }
 
-        createOrUpdateEntity.getServiceData().setEntityDataId(
-                createOrUpdateAccessor.findDataEntityByTargetAndSource(
-                        request.getTargetEntityId(),
-                        request.getSourceEntityId()
-                ).getId()
+        EntityData entityData = createOrUpdateAccessor.findDataEntityByTargetAndSource(
+                request.getTargetEntityId(),
+                request.getSourceEntityId()
         );
 
-        createOrUpdateEntity.getServiceData().setRelations(
-                createOrUpdateAccessor.findAllRelationsByEntityId(
-                        createOrUpdateEntity.getServiceData().getEntityDataId()
-                )
-        );
+        if (entityData != null) {
+            createOrUpdateEntity.getServiceData().setEntityDataId(entityData.getId());
+
+            createOrUpdateEntity.getServiceData().setRelations(
+                    createOrUpdateAccessor.findAllRelationsByEntityId(
+                            createOrUpdateEntity.getServiceData().getEntityDataId()
+                    )
+            );
+        }
 
         return createOrUpdateEntity;
     }
