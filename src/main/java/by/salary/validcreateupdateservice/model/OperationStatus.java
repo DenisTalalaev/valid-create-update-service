@@ -13,4 +13,8 @@ public class OperationStatus {
         this.operationStatusCode = operationStatusCode;
         errors.add(new ErrorInfo(status, message));
     }
+
+    public OperationStatus(OperationStatusCode operationStatusCode) {
+        this.operationStatusCode = operationStatusCode;
+    }
 }

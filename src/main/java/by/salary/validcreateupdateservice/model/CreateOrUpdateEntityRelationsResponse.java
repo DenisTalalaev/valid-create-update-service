@@ -15,4 +15,8 @@ public class CreateOrUpdateEntityRelationsResponse {
                 exception.getMessage()
         );
     }
+
+    public CreateOrUpdateEntityRelationsResponse(OperationStatusCode operationStatusCode) {
+        operationStatus = new OperationStatus(operationStatusCode);
+    }
 }
