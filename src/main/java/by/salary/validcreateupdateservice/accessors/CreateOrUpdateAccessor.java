@@ -19,9 +19,11 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 public class CreateOrUpdateAccessor {
+
     private final DataSchemaConfigurationRepository dataSchemaConfigurationRepository;
     private final DataSchemaRepository dataSchemaRepository;
     private final CtDataSchemaTypeRepository ctDataSchemaTypeRepository;
+
     private final EntityDataRepository entityDataRepository;
     private final EntityRelationRepository entityRelationRepository;
     private final EntityRelationTypeRepository entityRelationTypeRepository;
@@ -71,7 +73,7 @@ public class CreateOrUpdateAccessor {
     }
 
     public EntityRelationType findEntityRelationType(UUID entityRelationTypeCode) {
-        return ctDataSchemaTypeRepository.findByCode(entityRelationTypeCode).orElseThrow(
+        return ctDataSchemaTypeRepository.findByCode(entityRelationTypeCode.toString()).orElseThrow(
                 () -> new CreateOrUpdateEntityRelationsException(
                         "Entity relation type with code: " + entityRelationTypeCode + " not found",
                         HttpStatus.NOT_FOUND
@@ -138,7 +140,11 @@ public class CreateOrUpdateAccessor {
         entityData.setDataSchemaConfiguration(createOrUpdateEntity.getRequestData().getDataSchemaConfigurationId() == null?
                 entityData.getDataSchemaConfiguration():
                 dataSchemaConfigurationRepository.getById(createOrUpdateEntity.getRequestData().getDataSchemaConfigurationId()));
+
+        entityData.setLastUpdated(new Timestamp(System.currentTimeMillis()));
+
         entityDataRepository.save(entityData);
+
 
         // Find relations
         List<RequestDataRelation> requestRelations = createOrUpdateEntity.getRequestData().getRelations();

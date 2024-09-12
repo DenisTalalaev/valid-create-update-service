@@ -12,5 +12,5 @@ import java.util.UUID;
 public interface CtDataSchemaTypeRepository extends JpaRepository<CtDataSchemaType, Integer> {
     Optional<CtDataSchemaType> findByName(String code);
 
-    Optional<EntityRelationType> findByCode(UUID entityRelationTypeCode);
+    Optional<EntityRelationType> findByCode(String entityRelationTypeCode);
 }
