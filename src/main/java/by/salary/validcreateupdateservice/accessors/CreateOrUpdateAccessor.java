@@ -126,21 +126,21 @@ public class CreateOrUpdateAccessor {
     }
 
     public void updateDataEntity(CreateOrUpdateEntity createOrUpdateEntity) {
-        // Save EntityData
-        EntityData entityData = entityDataRepository.save(
-                EntityData.builder()
-                        .sourceEntityId(createOrUpdateEntity.getRequestData().getSourceEntityId())
-                        .targetEntityId(createOrUpdateEntity.getRequestData().getTargetEntityId())
-                        .dataSchemaConfiguration(
-                                dataSchemaConfigurationRepository.getById(
-                                        createOrUpdateEntity.getRequestData().getDataSchemaConfigurationId()
-                                )
-                        )
-                        .createdDate(new Timestamp(System.currentTimeMillis()))
-                        .lastUpdated(new Timestamp(System.currentTimeMillis()))
-                        .build()
-        );
+        // Update EntityData
+        EntityData entityData = entityDataRepository.getById(createOrUpdateEntity.getServiceData().getEntityDataId());
 
+        entityData.setTargetEntityId(createOrUpdateEntity.getRequestData().getTargetEntityId() == null?
+                entityData.getTargetEntityId() : createOrUpdateEntity.getRequestData().getTargetEntityId());
+
+        entityData.setSourceEntityId(createOrUpdateEntity.getRequestData().getSourceEntityId() == null?
+                entityData.getSourceEntityId() : createOrUpdateEntity.getRequestData().getSourceEntityId());
+
+        entityData.setDataSchemaConfiguration(createOrUpdateEntity.getRequestData().getDataSchemaConfigurationId() == null?
+                entityData.getDataSchemaConfiguration():
+                dataSchemaConfigurationRepository.getById(createOrUpdateEntity.getRequestData().getDataSchemaConfigurationId()));
+        entityDataRepository.save(entityData);
+
+        // Find relations
         List<RequestDataRelation> requestRelations = createOrUpdateEntity.getRequestData().getRelations();
         List<ServiceDataRelation> serviceRelations = createOrUpdateEntity.getServiceData().getRelations();
 

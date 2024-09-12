@@ -8,7 +8,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface EntityDataRepository extends JpaRepository<EntityData, Integer> {
+public interface EntityDataRepository extends JpaRepository<EntityData, Long> {
 
     Optional<EntityData> findByTargetEntityIdAndSourceEntityId(UUID targetEntityId, UUID sourceEntityId);
 }
