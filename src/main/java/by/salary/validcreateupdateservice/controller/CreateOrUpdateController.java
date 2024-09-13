@@ -1,13 +1,11 @@
 package by.salary.validcreateupdateservice.controller;
 
-import by.salary.validcreateupdateservice.model.CreateOrUpdateEntityRelationsRequest;
-import by.salary.validcreateupdateservice.model.CreateOrUpdateEntityRelationsResponse;
+import by.salary.validcreateupdateservice.model.request.CreateOrUpdateEntityRelationsRequest;
+import by.salary.validcreateupdateservice.model.response.CreateOrUpdateEntityRelationsResponse;
 import by.salary.validcreateupdateservice.service.CreateOrUpdateService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor

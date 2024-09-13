@@ -1,4 +1,4 @@
-package by.salary.validcreateupdateservice.model;
+package by.salary.validcreateupdateservice.model.request;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;

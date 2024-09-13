@@ -1,4 +1,4 @@
-package by.salary.validcreateupdateservice.repository;
+package by.salary.validcreateupdateservice.repository.schemas;
 
 import by.salary.validcreateupdateservice.entity.CtDataSchemaType;
 import by.salary.validcreateupdateservice.entity.DataSchema;

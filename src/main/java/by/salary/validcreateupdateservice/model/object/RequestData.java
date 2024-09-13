@@ -1,4 +1,4 @@
-package by.salary.validcreateupdateservice.model;
+package by.salary.validcreateupdateservice.model.object;
 
 import lombok.Getter;
 import lombok.Setter;

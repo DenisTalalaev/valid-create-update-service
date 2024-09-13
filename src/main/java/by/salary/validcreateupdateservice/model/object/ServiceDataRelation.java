@@ -1,4 +1,4 @@
-package by.salary.validcreateupdateservice.model;
+package by.salary.validcreateupdateservice.model.object;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,8 +9,8 @@ import java.util.UUID;
 @Getter
 @Setter
 @AllArgsConstructor
-public class RequestDataRelation {
-
+public class ServiceDataRelation {
+    private Long id;
     private UUID targetEntityId;
     private Integer entityRelationTypeId;
 }

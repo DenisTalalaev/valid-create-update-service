@@ -1,4 +1,4 @@
-package by.salary.validcreateupdateservice.model;
+package by.salary.validcreateupdateservice.model.request;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;

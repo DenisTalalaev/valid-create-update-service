@@ -2,7 +2,7 @@ package by.salary.validcreateupdateservice.validators;
 
 import by.salary.validcreateupdateservice.entity.DataSchema;
 import by.salary.validcreateupdateservice.exceptions.CreateOrUpdateEntityRelationsException;
-import by.salary.validcreateupdateservice.model.CreateOrUpdateEntityRelationsRequest;
+import by.salary.validcreateupdateservice.model.request.CreateOrUpdateEntityRelationsRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.jsonschema.JsonSchema;
 import lombok.RequiredArgsConstructor;

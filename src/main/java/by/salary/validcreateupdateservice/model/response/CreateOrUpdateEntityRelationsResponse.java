@@ -1,4 +1,4 @@
-package by.salary.validcreateupdateservice.model;
+package by.salary.validcreateupdateservice.model.response;
 
 import by.salary.validcreateupdateservice.exceptions.CreateOrUpdateEntityRelationsException;
 import lombok.Getter;

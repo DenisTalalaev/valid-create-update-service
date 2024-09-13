@@ -1,4 +1,4 @@
-package by.salary.validcreateupdateservice.repository;
+package by.salary.validcreateupdateservice.repository.entities;
 
 import by.salary.validcreateupdateservice.entity.EntityData;
 import org.springframework.data.jpa.repository.JpaRepository;
